@@ -1,9 +1,11 @@
 --Basic-Level Tasks (10)
 create database [database_2]
+
 --1.Create a table Employees with columns: EmpID INT, Name (VARCHAR(50)), and Salary (DECIMAL(10,2)).
 use [database_2]
 create table Employees (EmpID int, Name varchar(50), Salary decimal(10,2))
 select * from Employees
+
 --2. Insert three records into the Employees table using different INSERT INTO approaches (single-row insert and multiple-row insert).
 insert into Employees values(1,'Ali',8000)
 insert into Employees(EmpID, Name, Salary) values
@@ -20,9 +22,11 @@ insert into Employees (EmpID, Name, Salary) values
 update Employees set Salary=4900 where EmpID=1
 update Employees set Salary = 5000 where EmpID=5
 update Employees set Salary = 7000 where Name = 'Ali'
+
 --4. Delete a record from the Employees table where EmpID = 2.
 delete Employees where EmpID=2
 select * from Employees
+
 --5. Demonstrate the difference between DELETE, TRUNCATE, and DROP commands on a test table.
 delete Employees
 insert into Employees(EmpID, Name, Salary) values
@@ -129,14 +133,18 @@ Price decimal(6,2)
 )
 select * from Products 
 drop table Products
+
 --21. Add a CHECK constraint to ensure Price is always greater than 0.
 alter table Products
 add check(Price>0)
+
 --22. Modify the table to add a StockQuantity column with a DEFAULT value of 50.
 alter table Products
 add StockQuantity int DEFAULT 50
+
 --23. Rename Category to ProductCategory
 exec sp_rename 'Products.Category', 'ProductCategory','column'
+
 --24. Insert 5 records into the Products table using standard INSERT INTO queries.
 insert into Products values 
 (1,'apple','fruit',5000,2),
@@ -144,9 +152,11 @@ insert into Products values
 (3,'cherry','fruit',8000,2),
 (4,'potato','vegetable',4000,5),
 (5,'onion','vegetable',7000,5)
+
 --25. Use SELECT INTO to create a backup table called Products_Backup containing all Products data.
 select * into Products_Backup from Products 
 select * from Products_Backup
+
 --26. Rename the Products table to Inventory.
 exec sp_rename 'Products','Inventory'
 select * from Inventory
@@ -154,8 +164,15 @@ select * from Inventory
 --27. Alter the Inventory table to change the data type of Price from DECIMAL(10,2) to FLOAT.
 alter table Inventory
 drop constraint CK__Products__Price__778AC167
+
 --constraintni olib tashlab keyin o'zgartirish kiritish mumkin ekan
 alter table Inventory
 alter column Price float
---28. Add an IDENTITY column named ProductCode that starts from 1000 and increments by 5.
 
+--28. Add an IDENTITY column named ProductCode starts from 1000 and increments by 5.
+create table ProductCode(ID int identity(1000,5), Name varchar(50) unique not null )
+
+
+insert into ProductCode values(
+'Ali'),('Nozim'),('Li')
+select * from ProductCode
