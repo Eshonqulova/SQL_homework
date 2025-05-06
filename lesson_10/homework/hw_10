@@ -217,3 +217,4 @@ select a.ProductID, a.ProductName, b.CategoryName from Products a
 join Categories b 
 on a.Category=b.CategoryID
 where b.CategoryName in('Electronics' , 'Furniture')
+
