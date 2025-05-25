@@ -71,19 +71,10 @@ INSERT INTO employees (id, name, department_id) VALUES
 (2, 'Eve', 2),
 (3, 'Frank', 1);
 
-select e.id,e.name,a.department_name from departments a
-join  employees e on a.id=e.id and department_name='sales'
-
-;WITH SalesEmployees AS (
-    SELECT e.id, e.name, d.department_name
-    FROM employees e
-    JOIN 
-        departments d ON e.id = d.id
-    WHERE 
-        d.department_name = 'Sales'
-)
-SELECT * FROM SalesEmployees;
-
+SELECT e.id, e.name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE d.department_name = 'Sales'
 --# 4. Find Customers with No Orders
 --**Task: Retrieve customers who have not placed any orders.**
 --**Tables: customers (columns: customer_id, name), orders (columns: order_id, customer_id)**
@@ -195,10 +186,14 @@ INSERT INTO employees (id, name, salary, department_id) VALUES
 (2, 'Nina', 75000, 1),
 (3, 'Olivia', 40000, 2),
 (4, 'Paul', 55000, 2);
-select * from employees
-;with cte as(select a.id,a.name,a.salary from employees a join employees b on a.department_id=b.id 
-where a.salary>(select avg( salary) from employees)) select * from cte
 
+SELECT e.*
+FROM employees e
+WHERE e.salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department_id = e.department_id
+)
 --# 8. Find Students with Highest Grade per Course
 
 --**Task: Retrieve students who received the highest grade in each course.**
@@ -253,10 +248,16 @@ INSERT INTO products (id, product_name, price, category_id) VALUES
 (6, 'Speakers', 300, 2),
 (7, 'Earbuds', 100, 2);
 
-select  top 1* from (select top 3 * from products order by price desc ) ranked order by price
-
 select * from products as a 
 where 3=(select COUNT(price) from products as b where a.price<=b.price)
+
+    WITH ranked_products AS (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY category_id ORDER BY price DESC) AS rn
+    FROM products
+)
+SELECT *
+FROM ranked_products
+WHERE rn = 3
 
 --# 10. Find Employees whose Salary Between Company Average and Department Max Salary
 
